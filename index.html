@@ -19,7 +19,6 @@
             const image = EO.target;
             //изменяю курсор
             image.style.cursor = 'move';
-            image.style.zIndex = 10;
             document.body.append(image);
             const shiftX = EO.clientX - image.getBoundingClientRect().left;
             const shiftY = EO.clientY - image.getBoundingClientRect().top;
@@ -42,8 +41,9 @@
                 //изменяю курсор на обычный
                 image.style.cursor = 'default';
                 //удаляю обработчики
-                document.removeEventListener('mousedown', imageStartMove);
                 document.removeEventListener('mousemove', imageMove);
+                document.removeEventListener('mouseup', imageStopMove);
+                
             };
         };
         //событие, когда страница загрузилась
@@ -64,9 +64,10 @@
                 //обрабатываю событие mousedoun
                 image.addEventListener('mousedown', imageStartMove);
                 //для каждого изображения отменяю dragstart
-                image.ondragstart = function () {
-                    return false;
-                };
+                image.addEventListener('dragstart', function (EO) {
+                    EO = EO || window.event;
+                    EO.preventDefault();});
+                
             };
         });
     </script>
